@@ -397,8 +397,11 @@ struct EdgeType {
 }; */
 
 
+#define QUICK
+
+#ifdef QUICK
 struct EdgeType{
-	static const int TypeSize = 10;
+	static const int TypeSize = 130;
 	int node_id;
 
 	int from_to[TypeSize] = {-1};
@@ -525,6 +528,153 @@ struct EdgeType{
 ;
 
 
+#else
+
+struct EdgeType {
+
+	int node_id;
+	// key is eType, value is count
+	unordered_map<int, int> from_to;
+	int from_to_size;
+	unordered_map<int, int> to_from;
+	int to_from_size;
+
+
+	unsigned long long split_(const string &txt, vector<string> &strs, char ch) {
+		//this is the general case
+		size_t pos = txt.find(ch);
+		size_t initialPos = 0;
+		strs.clear();
+		// Decompose statement
+		while (pos != string::npos) {
+			strs.push_back(txt.substr(initialPos, pos - initialPos));
+			initialPos = pos + 1;
+			pos = txt.find(ch, initialPos);
+		}
+		// Add the last one
+		strs.push_back(txt.substr(initialPos, min(pos, txt.size()) - initialPos + 1));
+		//return the size of the vector
+		return strs.size();
+	}
+
+	void build(vector<int> &from_to_info, vector<int> &to_from_info) {
+		// ! vector need test
+		for (int i = 0; i < from_to_info.size(); i = i + 2) {
+			from_to[from_to_info[i]] = from_to_info[i + 1];
+		}
+		from_to_size = from_to_info.size() / 2;
+		for (int i = 0; i < to_from_info.size(); i = i + 2) {
+			to_from[to_from_info[i]] = to_from_info[i + 1];
+		}
+		to_from_size = to_from_info.size() / 2;
+	}
+
+	EdgeType(int n_id, string & edge_types, bool is_left_to_right) {
+		node_id = n_id;
+		vector<string> v;
+		split_(edge_types, v, ';');
+
+		vector<string> from_to_;
+		vector<string> to_from_;
+
+		//! v[0] or v[1] may not exist
+		split_(v[0], from_to_, ',');
+		split_(v[1], to_from_, ',');
+
+		vector<int> from_to_int;
+		vector<int> to_from_int;
+
+		if (from_to_.size() > 1) {
+			for (int i = 0; i < from_to_.size(); i++) {
+				from_to_int.push_back(atoi(from_to_[i].c_str()));
+			}
+		}
+
+		if (to_from_.size() > 1) {
+			for (int i = 0; i < to_from_.size(); i++) {
+				to_from_int.push_back(atoi(to_from_[i].c_str()));
+			}
+		}
+
+		if (is_left_to_right) {
+			build(from_to_int, to_from_int);
+		}
+		else {
+			build(to_from_int, from_to_int);
+		}
+	}
+
+	EdgeType(int n_id, EdgeType &et) {
+		node_id = n_id;
+		this->from_to = et.to_from;
+		this->to_from = et.from_to;
+		this->from_to_size = et.to_from_size;
+		this->to_from_size = et.from_to_size;
+	}
+	/*
+	EdgeType(int n_id, vector<int> &from_to_info, vector<int> &to_from_info) {
+	// parse edge_type_string
+	node_id = n_id;
+	// ! vector need test
+	for (int i = 0; i < from_to_info.size(); i = i + 2) {
+	from_to[from_to_info[i]] = from_to_info[i + 1];
+	}
+	from_to_size = from_to_info.size() / 2;
+	for (int i = 0; i < to_from_info.size(); i = i + 2) {
+	to_from[to_from_info[i]] = to_from_info[i + 1];
+	}
+	to_from_size = to_from_info.size() / 2;
+	}
+	*/
+
+	EdgeType() {
+
+	}
+
+	// this one is data, the parameter is query
+	inline bool is_in_edge_type(EdgeType * e_type) {
+		// e_type should be in this
+
+		if (from_to_size < e_type->to_from_size || to_from_size < e_type->from_to_size) {
+			return false;
+		}
+
+		// hashmap iterator need test
+
+		for (auto it = e_type->from_to.begin(); it != e_type->from_to.end(); ++it) {
+			int eType = it->first;
+			int count = it->second;
+
+			if (to_from.find(eType) == to_from.end()) {
+				return false;
+			}
+
+			if (to_from[eType] < count) {
+				return false;
+			}
+
+		}
+
+		for (auto it = e_type->to_from.begin(); it != e_type->to_from.end(); ++it) {
+			int eType = it->first;
+			int count = it->second;
+
+			if (from_to.find(eType) == from_to.end()) {
+				return false;
+			}
+
+			if (from_to[eType] < count) {
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+};
+
+#endif
 
 #endif // !DATASTRUCTURE_HEAD
 

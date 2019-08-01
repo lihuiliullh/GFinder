@@ -20,6 +20,7 @@
 
 using namespace std;
 
+#define BUFF_SIZE 10240
 
 // calculate there are how many distinct label and the max label is what
 inline void preprocessDataGraph(string data_graph_file) {
@@ -33,14 +34,14 @@ inline void preprocessDataGraph(string data_graph_file) {
 	g_nodes_label_after_change_data_graph = new int[g_cnt_node_of_data_graph];
 
 	FILE *fp;
-	char str[255];
+	char str[BUFF_SIZE];
 
 	fp = fopen(data_graph_file.c_str(), "r");
 	long long largest_label = -1;
 	unordered_set<long long> unique_label_set;
 	long long count_edge_number = 0;
 
-	while (fgets(str, 255, fp) != NULL) {
+	while (fgets(str, BUFF_SIZE, fp) != NULL) {
 		line = string(str);
 		if (line.at(0) == 'v') {
 			split(line, v, ' ');
@@ -317,11 +318,11 @@ inline void readAndProcessDataGraph(string data_graph_file) {
 	string line;
 	vector<string> v;
 	FILE *fp;
-	char str[255];
+	char str[BUFF_SIZE];
 
 	fp = fopen(data_graph_file.c_str(), "r");
 
-	while (fgets(str, 255, fp) != NULL) {
+	while (fgets(str, BUFF_SIZE, fp) != NULL) {
 		line = string(str);
 		if (line.at(0) == 'v') {
 			split(line, v, ' ');
@@ -725,12 +726,12 @@ inline void single_readQueryGraph(string query_graph_file) {
 
 	string line;
 	vector<string> v;
-	char str[255];
+	char str[BUFF_SIZE];
 	FILE *fp;
 
 	fp = fopen(query_graph_file.c_str(), "r");
 
-	while (fgets(str, 255, fp) != NULL) {
+	while (fgets(str, BUFF_SIZE, fp) != NULL) {
 		line = string(str);
 		if (line.at(0) == 't') {
 			split(line, v, ' ');

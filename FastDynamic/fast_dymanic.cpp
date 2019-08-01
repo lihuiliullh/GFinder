@@ -196,9 +196,19 @@ int main(int argc, char *argv[])
 	//argv[1] = "C:\\Users\\lihui\\workspace\\V7-Template0-B0-small-grouped.csv.format";
 	argv[2] = "C:\\Users\\lihui\\workspace\\V7-Template0-B0-small-grouped.csv.format";
 
+	
 	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Composite-B0-by-cand-small-grouped.csv.format";
 	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Template0-B0-small-grouped.csv.format";
 	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Template0-B0-small-grouped.csv.format";
+
+	
+
+	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-shift-round.csv.filter-grouped.csv.format";
+	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template1-grouped.csv.format";
+
+	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-round.csv.filter-grouped.csv.reorder-eType.csv.format";
+	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template6-grouped.csv.reorder-eType.csv.format";
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	argv[3] = "-f";
@@ -317,8 +327,8 @@ int main(int argc, char *argv[])
 
 				long long root_cand_id = g_root_candidates[region];
 
-				if (root_cand_id != 137) {
-					//continue;
+				if (root_cand_id != 8308) {
+					continue;
 				}
 
 				//if (root_cand_id == 12) {
@@ -351,6 +361,17 @@ int main(int argc, char *argv[])
 					
 				}
 
+				// print correct partial match
+				cout << "Exact Partial Match: ";
+				for (int step = 0; step < g_core_size; step++) {
+					CPINode* tmp_node = &indexSet[step];
+					if (tmp_node->size == 1) {
+						cout << step << ":" << tmp_node->candidates[0] << " ";
+					}
+				}
+				cout << endl;
+
+				//continue;
 				/*if (g_core_size != g_cnt_node_query_graph) {
 					continue;
 				}*/
