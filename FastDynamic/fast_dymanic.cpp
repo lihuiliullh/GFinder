@@ -79,6 +79,17 @@ void myy(vector<int> &a) {
 	}
 }
 
+
+inline bool is_contain_empty_indexset() {
+	for (int step = 0; step < g_core_size; step++) {
+		CPINode* tmp_node = &indexSet[step];
+		if (tmp_node->size == 1 && tmp_node->candidates[0] == -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -206,8 +217,8 @@ int main(int argc, char *argv[])
 	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-shift-round.csv.filter-grouped.csv.format";
 	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template1-grouped.csv.format";
 
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-round.csv.filter-grouped.csv.reorder-eType.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template6-grouped.csv.reorder-eType.csv.format";
+	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-grouped.csv.format";
+	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template7-grouped.csv.format";
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +339,7 @@ int main(int argc, char *argv[])
 				long long root_cand_id = g_root_candidates[region];
 
 				if (root_cand_id != 8308) {
-					continue;
+					//continue;
 				}
 
 				//if (root_cand_id == 12) {
@@ -350,6 +361,10 @@ int main(int argc, char *argv[])
 					buildDynamicTreeCPI(root_cand_id);
 					for (int ii = 0; ii < 20; ii++) {
 						backwardPrune();
+
+						if (is_contain_empty_indexset) {
+							break;
+						}
 					}
 					
 					// buildCoreQueryTree();
@@ -371,7 +386,7 @@ int main(int argc, char *argv[])
 				}
 				cout << endl;
 
-				//continue;
+				continue;
 				/*if (g_core_size != g_cnt_node_query_graph) {
 					continue;
 				}*/
