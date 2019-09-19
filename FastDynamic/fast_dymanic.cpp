@@ -217,8 +217,8 @@ int main(int argc, char *argv[])
 	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-shift-round.csv.filter-grouped.csv.format";
 	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template1-grouped.csv.format";
 
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-grouped.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template7-grouped.csv.format";
+	argv[1] = "C:\\Users\\lihui\\workspace\\DARPA\\Milan\\complete-phone-sms-grouped.csv.format";
+	argv[2] = "C:\\Users\\lihui\\workspace\\DARPA\\Milan\\template7-grouped.csv.format";
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,14 +338,6 @@ int main(int argc, char *argv[])
 
 				long long root_cand_id = g_root_candidates[region];
 
-				if (root_cand_id != 8308) {
-					//continue;
-				}
-
-				//if (root_cand_id == 12) {
-				//	int a = 0;
-				//}
-
 				g_nte_array_for_matching_unit_index = 0;
 				g_matching_sequence_index = 0;
 				g_matching_order_size_of_core = 0;
@@ -362,18 +354,13 @@ int main(int argc, char *argv[])
 					for (int ii = 0; ii < 20; ii++) {
 						backwardPrune();
 
-						if (is_contain_empty_indexset) {
-							break;
-						}
+						//if (is_contain_empty_indexset()) {
+						//	break;
+						//}
 					}
 					
 					// buildCoreQueryTree();
 					generateMatchingOrderByDynamic();
-				}
-
-				if (g_forward_build_sequence.size() < 70) {
-					int aa = 0;
-					
 				}
 
 				// print correct partial match
@@ -386,7 +373,6 @@ int main(int argc, char *argv[])
 				}
 				cout << endl;
 
-				continue;
 				/*if (g_core_size != g_cnt_node_query_graph) {
 					continue;
 				}*/

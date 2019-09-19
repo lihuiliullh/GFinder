@@ -401,7 +401,7 @@ struct EdgeType {
 
 #ifdef QUICK
 struct EdgeType{
-	static const int TypeSize = 130;
+	static const int TypeSize = 10;
 	int node_id;
 
 	int from_to[TypeSize] = {-1};
