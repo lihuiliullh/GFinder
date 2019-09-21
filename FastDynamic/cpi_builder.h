@@ -22,7 +22,7 @@ extern long long visited_int_for_query2[MAX_QUERY_NODE];
 
 inline void resetTreeNodes() {
 	for (long long i = 0; i < g_cnt_node_query_graph; i++) {
-		CoreQueryBFSTreeNode & c = core_query_tree[i];
+		CoreQueryBFSTreeNode & c = core_query_tree_idx_is_id[i];
 		c.parent_node = -1;
 		c.children = make_pair(0, 0);
 		c.nte = make_pair(0, 0);
@@ -45,6 +45,15 @@ inline void addNonTreeEdgeToTreeNode(CoreQueryBFSTreeNode & treeNode, long long 
 	else
 		treeNode.nte.second++;
 }
+
+inline void addCrossLevelNTEToTreeNode(CoreQueryBFSTreeNode& treeNode, int otherEnd) {
+	if (treeNode.cross_lvl_nte == NULL)
+		treeNode.cross_lvl_nte = new vector <int>;
+	treeNode.cross_lvl_nte->push_back(otherEnd);
+}
+
+
+
 
 inline void addChildToTreeNode(CoreQueryBFSTreeNode & treeNode, long long child) {
 	g_core_tree_node_child_array[g_core_tree_node_child_array_index++] = child;
@@ -78,7 +87,7 @@ inline void initCpiNodeByParent(CPINode & cur_node_unit, CPINode & parent_unit) 
 
 
 
-inline void generateNLFQueryNode(long long & current_node, long long & degree_cur, long long & max_nb_degree) {
+inline void generateNLFForQueryNode(long long & current_node, long long & degree_cur, long long & max_nb_degree) {
 
 	//============== generate the neighborhood label array =======================
 	long long first = g_nodes_adj_list_start_index_query_graph[current_node];
@@ -86,7 +95,7 @@ inline void generateNLFQueryNode(long long & current_node, long long & degree_cu
 	memset(NLF_array_query, 0, sizeof(long long) * NLF_size);
 	// generate NLF_array of current node
 	for (long long j = first; j < first + degree_cur; j++) {
-		long long local_label = g_nodes_label_query_graph[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
+		long long local_label = g_nodes_label_query_graph_idx_is_id[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
 		long long idx = NLF_size - 1 - local_label / SIZEOF_INT;
 		long long pos = local_label % SIZEOF_INT;
 		NLF_array_query[idx] |= (1 << pos);
@@ -104,7 +113,7 @@ inline void generateNLFQueryNode(long long & current_node, long long & degree_cu
 
 inline void initRootCPI(long long root_candidate_id) {
 	// build root indexSet
-	CPINode & root_node_unit = indexSet[g_root_node_id_of_query];
+	CPINode & root_node_unit = g_indexSet_idx_is_id[g_root_node_id_of_query];
 	root_node_unit.candidates[0] = root_candidate_id;
 	root_node_unit.size = 1;
 	fill(root_node_unit.path, root_node_unit.path + 1, 1);
@@ -113,13 +122,13 @@ inline void initRootCPI(long long root_candidate_id) {
 
 
 inline bool sortByDegree_Query_dec(const long long id1, const long long id2) {
-	return (g_node_degree_query_graph[id1] > g_node_degree_query_graph[id2]);
+	return (g_node_degree_query_graph_idx_is_id[id1] > g_node_degree_query_graph_idx_is_id[id2]);
 }
 
 
 
-extern long long BFS_sequence_query_of_all[MAX_QUERY_NODE];
-extern long long iterateCoreSequence[MAX_QUERY_NODE];
+extern long long BFS_visit_sequence_of_query_contain_all_nodes[MAX_QUERY_NODE];
+extern long long BFS_visit_sequence_of_query_only_core[MAX_QUERY_NODE];
 
 
 

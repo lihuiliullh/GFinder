@@ -24,8 +24,8 @@ inline long long selectRootFromQuery() {
 		if (g_core_number_query_graph[i] < 2)	//root node must be selected from the core structure
 			continue;
 
-		label = g_nodes_label_query_graph[i];
-		degree = g_node_degree_query_graph[i];
+		label = g_nodes_label_query_graph_idx_is_id[i];
+		degree = g_node_degree_query_graph_idx_is_id[i];
 
 		//binary search used here
 		long long s = g_label_to_sort_by_degree_node_data_graph[label - 1].second;
@@ -63,8 +63,8 @@ inline boolean checkCandidate(long long cand_id, long long query_id) {
 
 
 inline void findRootCandidate_() {
-	long long label = g_nodes_label_query_graph[g_root_node_id_of_query];
-	long long degree = g_node_degree_query_graph[g_root_node_id_of_query];
+	long long label = g_nodes_label_query_graph_idx_is_id[g_root_node_id_of_query];
+	long long degree = g_node_degree_query_graph_idx_is_id[g_root_node_id_of_query];
 	long long max_nb_degree_query = 0;
 	long long core = g_core_number_query_graph[g_root_node_id_of_query];
 
@@ -73,11 +73,11 @@ inline void findRootCandidate_() {
 
 	// generate neighbor label filter by query graph
 	for (long long j = first; j < first + degree; j++) {
-		long long local_label = g_nodes_label_query_graph[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
+		long long local_label = g_nodes_label_query_graph_idx_is_id[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
 		long long idx = NLF_size - 1 - local_label / SIZEOF_INT;
 		long long pos = local_label % SIZEOF_INT;
 		NLF_array_query[idx] |= (1 << pos);
-		long long nb_degree = g_node_degree_query_graph[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
+		long long nb_degree = g_node_degree_query_graph_idx_is_id[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
 		if (nb_degree > max_nb_degree_query) //find the max neighbor degree
 			max_nb_degree_query = nb_degree;
 	}
@@ -112,8 +112,8 @@ inline void findRootCandidate_() {
 inline void findRootCandidate() {
 	//================= First step: deal with the ROOT node ===============================
 
-	long long label = g_nodes_label_query_graph[g_root_node_id_of_query];
-	long long degree = g_node_degree_query_graph[g_root_node_id_of_query];
+	long long label = g_nodes_label_query_graph_idx_is_id[g_root_node_id_of_query];
+	long long degree = g_node_degree_query_graph_idx_is_id[g_root_node_id_of_query];
 
 #ifdef CORE_AND_MAX_NB_FILTER
 	long long max_nb_degree_query = 0;
@@ -126,7 +126,7 @@ inline void findRootCandidate() {
 
 	// generate neighbor label filter by query graph
 	for (long long j = first; j < first + degree; j++) {
-		long long local_label = g_nodes_label_query_graph[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
+		long long local_label = g_nodes_label_query_graph_idx_is_id[g_nodes_adj_list_with_edge_type_query_graph[j].node_id];
 		long long idx = NLF_size - 1 - local_label / SIZEOF_INT;
 		long long pos = local_label % SIZEOF_INT;
 		NLF_array_query[idx] |= (1 << pos);

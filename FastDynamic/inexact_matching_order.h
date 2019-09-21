@@ -52,19 +52,19 @@ inline void generateInexactMatchingOrder() {
 			double path_sum = 0;
 
 			//find its connection node
-			long long node = core_query_tree[leaf].parent_node;
+			long long node = core_query_tree_idx_is_id[leaf].parent_node;
 			long long before_connect = leaf; //set the node before connection node
-			long long parent_cand_size = indexSet[BFS_parent_query[leaf]].size;
+			long long parent_cand_size = g_indexSet_idx_is_id[BFS_parent_query_idx_is_id[leaf]].size;
 
 			for (long long i = 0; i < parent_cand_size; i++)
-				path_acuu[i] = indexSet[leaf].size_of_index[i];
+				path_acuu[i] = g_indexSet_idx_is_id[leaf].size_of_index[i];
 
 			while (g_query_node_id_to_matching_order_num[node] == 0) { // here, stop when reaching the connection node
-				long long cand_size = indexSet[BFS_parent_query[node]].size;
+				long long cand_size = g_indexSet_idx_is_id[BFS_parent_query_idx_is_id[node]].size;
 				for (long long x = 0; x < cand_size; x++) {
 					path_temp[x] = 0;
-					for (long long y = 0; y < indexSet[node].size_of_index[x]; y++) {
-						long long pos = indexSet[node].index_N_up_u[x][y].index;
+					for (long long y = 0; y < g_indexSet_idx_is_id[node].size_of_index[x]; y++) {
+						long long pos = g_indexSet_idx_is_id[node].index_N_up_u[x][y].index;
 						path_temp[x] += path_acuu[pos];
 					}
 				}
@@ -73,10 +73,10 @@ inline void generateInexactMatchingOrder() {
 					path_acuu[x] = path_temp[x];
 
 				before_connect = node;//set the node as the last node before the connection node
-				node = core_query_tree[node].parent_node;//this node's parent
+				node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 			}
 
-			cand_con = indexSet[node].size;
+			cand_con = g_indexSet_idx_is_id[node].size;
 			for (long long i = 0; i < cand_con; i++)
 				path_sum += path_acuu[i];
 			leaf_path_info[leaf].first = before_connect;//set the connection node array
@@ -107,7 +107,7 @@ inline void generateInexactMatchingOrder() {
 
 		while (!g_query_node_id_to_matching_order_num[leaf_id]) { // here, actually stop at an already selected node
 			temp_array_query[temp_array_query_index++] = leaf_id;
-			leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+			leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 		}
 
 		// add the sequence in the temp array into the sequence array
@@ -147,17 +147,17 @@ inline void generateInexactMatchingOrder() {
 				double path_sum = 0;
 
 				//========== find its connection node
-				CPINode & unit_leaf = indexSet[leaf];
-				long long node = core_query_tree[leaf].parent_node;
+				CPINode & unit_leaf = g_indexSet_idx_is_id[leaf];
+				long long node = core_query_tree_idx_is_id[leaf].parent_node;
 				long long before_con = leaf; //set the node before connection node
 
-				for (long long i = 0; i < indexSet[BFS_parent_query[leaf]].size; i++)
+				for (long long i = 0; i < g_indexSet_idx_is_id[BFS_parent_query_idx_is_id[leaf]].size; i++)
 					path_acuu[i] = unit_leaf.size_of_index[i];
 
 				while (!g_query_node_id_to_matching_order_num[node]) { // here, stop when reaching the connection node
 
-					CPINode & unit_node = indexSet[node];
-					long long cand_size = indexSet[BFS_parent_query[node]].size;
+					CPINode & unit_node = g_indexSet_idx_is_id[node];
+					long long cand_size = g_indexSet_idx_is_id[BFS_parent_query_idx_is_id[node]].size;
 
 					for (long long x = 0; x < cand_size; x++) {
 						path_temp[x] = 0;
@@ -171,10 +171,10 @@ inline void generateInexactMatchingOrder() {
 						path_acuu[x] = path_temp[x];
 
 					before_con = node;//set before connection node
-					node = core_query_tree[node].parent_node;//this node's parent
+					node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 				}
 
-				cand_con = indexSet[node].size;
+				cand_con = g_indexSet_idx_is_id[node].size;
 				leaf_path_info[leaf].first = before_con;//set the connection node array
 
 				for (long long i = 0; i < cand_con; i++)
@@ -202,7 +202,7 @@ inline void generateInexactMatchingOrder() {
 			temp_array_query_index = 0; //always put to zero before using it, for safety
 			while (g_query_node_id_to_matching_order_num[leaf_id] == 0) { // here, actually stop at an already selected node
 				temp_array_query[temp_array_query_index++] = leaf_id;
-				leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+				leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 			}
 
 			while (temp_array_query_index != 0) {// add the sequence in the temp array into the sequence array

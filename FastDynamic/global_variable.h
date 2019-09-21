@@ -83,11 +83,11 @@ extern int g_nodes_adj_list_start_index_query_graph[MAX_QUERY_NODE];
 extern long long g_label_cur_node_query_graph;
 extern long long g_degree_cur_node_query_graph;
 
-extern int g_nodes_label_query_graph[MAX_QUERY_NODE];
-extern long long g_node_degree_query_graph[MAX_QUERY_NODE];
+extern int g_nodes_label_query_graph_idx_is_id[MAX_QUERY_NODE];
+extern long long g_node_degree_query_graph_idx_is_id[MAX_QUERY_NODE];
 extern long long g_core_number_query_graph[MAX_QUERY_NODE];
 
-extern char g_visited_for_query_graph[MAX_QUERY_NODE];
+extern char g_visited_for_query_graph_idx_is_id[MAX_QUERY_NODE];
 
 
 extern int * NEC_mapping_child_with_same_label_cnt;
@@ -108,7 +108,7 @@ extern long long NEC_set_index;
 extern vector<pair<long long, long long> > NEC_set_by_label_index; //include a redunant element to set the end
 
 extern long long g_root_node_id_of_query;
-extern CPINode indexSet[MAX_QUERY_NODE];
+extern CPINode g_indexSet_idx_is_id[MAX_QUERY_NODE];
 extern long long * NLF_array_query; //for query
 extern long long NLF_size;
 extern long long * NLF_check;
@@ -136,7 +136,7 @@ extern int * g_already_has_one_parent_data_node;
 extern CPICell * g_index_array_for_indexSet;
 extern long long count_index_array_for_indexSet;
 
-extern CoreQueryBFSTreeNode core_query_tree[MAX_QUERY_NODE];
+extern CoreQueryBFSTreeNode core_query_tree_idx_is_id[MAX_QUERY_NODE];
 extern long long g_visited_int_for_query_graph[MAX_QUERY_NODE];
 extern vector <long long> g_core_tree_node_child_array;
 extern vector <long long> g_core_tree_node_nte_array;
@@ -157,6 +157,7 @@ extern long long NEC_leaf_mapping_pair_index;
 extern bool g_isTree;
 
 extern char * g_data_edge_matrix;
+extern char* g_query_adj_matrix;
 extern char SIZEOK;
 extern int SIZE_OF_EDGE_MATRIX;
 extern HashTable ** g_hash_table;
@@ -168,7 +169,7 @@ extern char * v_cnt;  // it is the same as g_good_count_data_graph
 
 extern int * MAX_NB_degree_data;
 
-extern long long g_BFS_sequence_length;
+extern long long g_BFS_sequence_length_of_query_all_node;
 
 extern double found_mapping_enumeration;
 
@@ -179,8 +180,8 @@ extern int * g_two_hop_label_count_query_graph;
 extern vector<set<long long>> g_set_of_node_adj_list_query_graph;
 extern vector < pair<long long, long long> > level_index;
 
-extern long long BFS_parent_query[MAX_QUERY_NODE];
-extern long long BFS_level_query[MAX_QUERY_NODE];
+extern long long BFS_parent_query_idx_is_id[MAX_QUERY_NODE];
+extern long long BFS_level_query_idx_is_id[MAX_QUERY_NODE];
 
 //extern vector<set <int>> g_adj_list_one_to_four_data_graph;
 extern HashTable * g_adj_list_one_hop_distance_data_graph;

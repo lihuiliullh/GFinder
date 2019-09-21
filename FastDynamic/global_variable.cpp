@@ -50,12 +50,12 @@ int g_nodes_adj_list_start_index_query_graph[MAX_QUERY_NODE];
 long long g_label_cur_node_query_graph;
 long long g_degree_cur_node_query_graph;
 
-int g_nodes_label_query_graph[MAX_QUERY_NODE];
-long long g_node_degree_query_graph[MAX_QUERY_NODE];
+int g_nodes_label_query_graph_idx_is_id[MAX_QUERY_NODE];
+long long g_node_degree_query_graph_idx_is_id[MAX_QUERY_NODE];
 long long g_core_number_query_graph[MAX_QUERY_NODE];
 
 
-char g_visited_for_query_graph[MAX_QUERY_NODE];
+char g_visited_for_query_graph_idx_is_id[MAX_QUERY_NODE];
 
 
 int * NEC_mapping_child_with_same_label_cnt;
@@ -76,7 +76,7 @@ long long NEC_set_index;
 vector<pair<long long, long long> > NEC_set_by_label_index;
 
 long long g_root_node_id_of_query;
-CPINode indexSet[MAX_QUERY_NODE];
+CPINode g_indexSet_idx_is_id[MAX_QUERY_NODE];
 long long * NLF_array_query;
 long long NLF_size = -1;
 long long * NLF_check;
@@ -104,7 +104,7 @@ int * g_already_has_one_parent_data_node;
 CPICell * g_index_array_for_indexSet;
 long long count_index_array_for_indexSet;
 
-CoreQueryBFSTreeNode core_query_tree[MAX_QUERY_NODE];
+CoreQueryBFSTreeNode core_query_tree_idx_is_id[MAX_QUERY_NODE];
 long long g_visited_int_for_query_graph[MAX_QUERY_NODE];
 vector <long long> g_core_tree_node_child_array;
 vector <long long> g_core_tree_node_nte_array;
@@ -126,6 +126,8 @@ long long NEC_leaf_mapping_pair_index = 0;
 bool g_isTree;
 
 char * g_data_edge_matrix;
+char* g_query_adj_matrix;
+
 char SIZEOK;
 int SIZE_OF_EDGE_MATRIX = 10000;
 HashTable ** g_hash_table;
@@ -136,7 +138,7 @@ char * v_cnt;
 
 int * MAX_NB_degree_data;
 
-long long g_BFS_sequence_length = 0;
+long long g_BFS_sequence_length_of_query_all_node = 0;
 double found_mapping_enumeration = 10;
 int * g_one_hop_label_count_data_graph;
 int * g_two_hop_label_count_data_graph;
@@ -145,8 +147,8 @@ int * g_two_hop_label_count_query_graph = NULL;
 vector<set<long long>> g_set_of_node_adj_list_query_graph;
 vector < pair<long long, long long> > level_index;
 
-long long BFS_parent_query[MAX_QUERY_NODE];
-long long BFS_level_query[MAX_QUERY_NODE];
+long long BFS_parent_query_idx_is_id[MAX_QUERY_NODE];
+long long BFS_level_query_idx_is_id[MAX_QUERY_NODE];
 
 //vector<set <int>> g_adj_list_one_to_four_data_graph;
 HashTable * g_adj_list_one_hop_distance_data_graph;

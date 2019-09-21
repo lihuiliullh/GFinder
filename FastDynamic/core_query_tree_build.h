@@ -5,6 +5,8 @@
 
 #include "cpi_builder.h"
 
+// core_query_tree is used in bottom-up process.
+
 
 inline void buildBFSCoreQueryTree() {
 
@@ -28,16 +30,16 @@ inline void buildBFSCoreQueryTree() {
 	long long current_level = 1; //initial level starts at 1
 
 	// root node is 0
-	g_BFS_sequence_length = 0;
+	g_BFS_sequence_length_of_query_all_node = 0;
 	level_index.clear();
 	visited[g_root_node_id_of_query] = 1;
-	BFS_level_query[g_root_node_id_of_query] = 1;
-	BFS_parent_query[g_root_node_id_of_query] = -1;
-	initializeTreeNode(core_query_tree[g_root_node_id_of_query], -1);
+	BFS_level_query_idx_is_id[g_root_node_id_of_query] = 1;
+	BFS_parent_query_idx_is_id[g_root_node_id_of_query] = -1;
+	initializeTreeNode(core_query_tree_idx_is_id[g_root_node_id_of_query], -1);
 
 	while (true) {
 
-		long long start = g_BFS_sequence_length;
+		long long start = g_BFS_sequence_length_of_query_all_node;
 
 		// BFS algorithm
 		// just iterate one level, pointer_this_end is the end of this level
@@ -59,14 +61,14 @@ inline void buildBFSCoreQueryTree() {
 				if (visited[neighbor] != 0) { //this neighbor node has been visited before,
 					// visited and not parent, so it is s-NTE
 					// if core childnode is 1, the condition will be false
-					if (neighbor != core_query_tree[current_node].parent_node) {
+					if (neighbor != core_query_tree_idx_is_id[current_node].parent_node) {
 						//if (BFS_level_query[neighbor] <= current_level) {
-						addNonTreeEdgeToTreeNode(core_query_tree[current_node], neighbor);
+						addNonTreeEdgeToTreeNode(core_query_tree_idx_is_id[current_node], neighbor);
 					}
 
 
-					//if (visited[neighbor] > current_level)	//this is a cross level nte
-					//	addCrossLevelNTEToTreeNode(core_query_tree[neighbor], current_node); //record its cross level nte parent
+					if (visited[neighbor] > current_level)	//this is a cross level nte
+						addCrossLevelNTEToTreeNode(core_query_tree_idx_is_id[neighbor], current_node); //record its cross level nte parent
 
 				}
 				else {//this child node has not been visited.
@@ -76,30 +78,33 @@ inline void buildBFSCoreQueryTree() {
 					queue_array[queue_end_pointer] = neighbor;
 					queue_end_pointer++;
 
-					BFS_level_query[neighbor] = current_level + 1;
-					BFS_parent_query[neighbor] = current_node;
+					BFS_level_query_idx_is_id[neighbor] = current_level + 1;
+					BFS_parent_query_idx_is_id[neighbor] = current_node;
 
+					// core query tree don't contain no core node
+					// but BFS_level_query and BFS_parent_query can contain all nodes
 					if (g_core_number_query_graph[neighbor] < 2)
 						continue;
 
-					initializeTreeNode(core_query_tree[neighbor], current_node);
-					addChildToTreeNode(core_query_tree[current_node], neighbor);
+					initializeTreeNode(core_query_tree_idx_is_id[neighbor], current_node);
+					addChildToTreeNode(core_query_tree_idx_is_id[current_node], neighbor);
 				}
 			}
 			// simulation_sequence is used to store the sequence of BFS
-			BFS_sequence_query_of_all[g_BFS_sequence_length] = current_node;
-			g_BFS_sequence_length++;
+			BFS_visit_sequence_of_query_contain_all_nodes[g_BFS_sequence_length_of_query_all_node] = current_node;
+			g_BFS_sequence_length_of_query_all_node++;
 		}
 
-		long long end = g_BFS_sequence_length;
+		long long end = g_BFS_sequence_length_of_query_all_node;
 
 		level_index.push_back(make_pair(start, end));
 
+		// why backward iterate?
 		for (long long i = end - 1; i >= start; i--) {
-			long long node = BFS_sequence_query_of_all[i];
+			long long node = BFS_visit_sequence_of_query_contain_all_nodes[i];
 			if (g_core_number_query_graph[node] < 2)
 				continue;
-			iterateCoreSequence[iterateCoreSequence_indx++] = node;
+			BFS_visit_sequence_of_query_only_core[iterateCoreSequence_indx++] = node;
 		}
 
 		if (queue_end_pointer == pointer_this_layer_end) //no node has been pushed in

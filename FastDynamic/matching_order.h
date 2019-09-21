@@ -63,7 +63,7 @@ inline void addIntoMatchOrderSequenceForWholeGraph(long long node_id, char isRoo
 	}
 	else {
 
-		CoreQueryBFSTreeNode * tree_node = &core_query_tree[node_id];
+		CoreQueryBFSTreeNode * tree_node = &core_query_tree_idx_is_id[node_id];
 
 		if (tree_node->nte.second != 0) {
 
@@ -105,14 +105,14 @@ inline void calculate_path_cost_in_core_by_core_query_tree(long long & root, lon
 		long long current_node = stack_array_query[stack_array_index - 1];
 		double current_nte_number = (double)sum_nontree_edge_of_every_node[current_node];
 		stack_array_index--;
-		CoreQueryBFSTreeNode & tree_node = core_query_tree[current_node];
+		CoreQueryBFSTreeNode & tree_node = core_query_tree_idx_is_id[current_node];
 
 		if (tree_node.children.second == 0) { //This is a leaf node
 
 											  //compute the sum of the path for the leaf node
 			long long path_sum = 0;
-			for (long long x = 0; x < indexSet[current_node].size; x++)
-				path_sum += indexSet[current_node].path[x];
+			for (long long x = 0; x < g_indexSet_idx_is_id[current_node].size; x++)
+				path_sum += g_indexSet_idx_is_id[current_node].path[x];
 
 			sum_path[current_node] = path_sum;
 
@@ -139,7 +139,7 @@ inline void calculate_path_cost_in_core_by_core_query_tree(long long & root, lon
 			   // It's DFS
 			for (long long i = tree_node.children.first; i < tree_node.children.first + tree_node.children.second; i++) {
 				long long child = g_core_tree_node_child_array[i];
-				sum_nontree_edge_of_every_node[child] = current_nte_number + core_query_tree[child].nte.second;
+				sum_nontree_edge_of_every_node[child] = current_nte_number + core_query_tree_idx_is_id[child].nte.second;
 				stack_array_query[stack_array_index++] = child;
 			}
 		}
@@ -158,7 +158,7 @@ inline void deal_with_first_path(long long & first_path_leaf, long long & first_
 		temp_array_query_index = 0; //always put to zero before using it
 		while (g_query_node_id_to_matching_order_num[leaf_id] == 0) { // here, actually stop at the bcc root, which is not to be processed here
 			temp_array_query[temp_array_query_index++] = leaf_id;
-			leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+			leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 		}
 
 		while (temp_array_query_index != 0) {// add the sequence in the temp array into the sequence array
@@ -185,7 +185,7 @@ inline void deal_with_first_path_(long long & first_path_leaf, long long & first
 		temp_array_query_index = 0; //always put to zero before using it
 		while (g_query_node_id_to_matching_order_num[leaf_id] == 0) { // here, actually stop at the bcc root, which is not to be processed here
 			temp_array_query[temp_array_query_index++] = leaf_id;
-			leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+			leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 		}
 
 		while (temp_array_query_index != 0) {// add the sequence in the temp array into the sequence array
@@ -246,21 +246,21 @@ inline void generateMatchingOrderByDynamic() {
 			double path_sum = 0;
 
 			//find its connection node
-			long long node = core_query_tree[leaf].parent_node;
+			long long node = core_query_tree_idx_is_id[leaf].parent_node;
 			long long before_connect = leaf; //set the node before connection node
 			// long long parent_cand_size = indexSet[BFS_parent_query[leaf]].size;
-			long long parent_cand_size = indexSet[node].size;
+			long long parent_cand_size = g_indexSet_idx_is_id[node].size;
 
 			for (long long i = 0; i < parent_cand_size; i++)
-				path_acuu[i] = indexSet[leaf].size_of_index[i];
+				path_acuu[i] = g_indexSet_idx_is_id[leaf].size_of_index[i];
 
 			while (g_query_node_id_to_matching_order_num[node] == 0) { // here, stop when reaching the connection node
 
-				long long cand_size = indexSet[g_forward_build_parent[node]].size;
+				long long cand_size = g_indexSet_idx_is_id[g_forward_build_parent[node]].size;
 				for (long long x = 0; x < cand_size; x++) {
 					path_temp[x] = 0;
-					for (long long y = 0; y < indexSet[node].size_of_index[x]; y++) {
-						long long pos = indexSet[node].index_N_up_u[x][y].index;
+					for (long long y = 0; y < g_indexSet_idx_is_id[node].size_of_index[x]; y++) {
+						long long pos = g_indexSet_idx_is_id[node].index_N_up_u[x][y].index;
 						path_temp[x] += path_acuu[pos];
 					}
 				}
@@ -269,10 +269,10 @@ inline void generateMatchingOrderByDynamic() {
 					path_acuu[x] = path_temp[x];
 
 				before_connect = node;//set the node as the last node before the connection node
-				node = core_query_tree[node].parent_node;//this node's parent
+				node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 			}
 
-			cand_con = indexSet[node].size;
+			cand_con = g_indexSet_idx_is_id[node].size;
 			for (long long i = 0; i < cand_con; i++)
 				path_sum += path_acuu[i];
 			leaf_path_info[leaf].first = before_connect;//set the connection node array
@@ -296,7 +296,7 @@ inline void generateMatchingOrderByDynamic() {
 
 		while (!g_query_node_id_to_matching_order_num[leaf_id]) { // here, actually stop at an already selected node
 			temp_array_query[temp_array_query_index++] = leaf_id;
-			leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+			leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 		}
 
 		// add the sequence in the temp array into the sequence array
@@ -337,17 +337,17 @@ inline void generateMatchingOrderByDynamic() {
 				double path_sum = 0;
 
 				//========== find its connection node
-				CPINode & unit_leaf = indexSet[leaf];
-				long long node = core_query_tree[leaf].parent_node;
+				CPINode & unit_leaf = g_indexSet_idx_is_id[leaf];
+				long long node = core_query_tree_idx_is_id[leaf].parent_node;
 				long long before_con = leaf; //set the node before connection node
 
-				for (long long i = 0; i < indexSet[g_forward_build_parent[leaf]].size; i++)
+				for (long long i = 0; i < g_indexSet_idx_is_id[g_forward_build_parent[leaf]].size; i++)
 					path_acuu[i] = unit_leaf.size_of_index[i];
 
 				while (!g_query_node_id_to_matching_order_num[node]) { // here, stop when reaching the connection node
 
-					CPINode & unit_node = indexSet[node];
-					long long cand_size = indexSet[g_forward_build_parent[node]].size;
+					CPINode & unit_node = g_indexSet_idx_is_id[node];
+					long long cand_size = g_indexSet_idx_is_id[g_forward_build_parent[node]].size;
 
 					for (long long x = 0; x < cand_size; x++) {
 						path_temp[x] = 0;
@@ -361,10 +361,10 @@ inline void generateMatchingOrderByDynamic() {
 						path_acuu[x] = path_temp[x];
 
 					before_con = node;//set before connection node
-					node = core_query_tree[node].parent_node;//this node's parent
+					node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 				}
 
-				cand_con = indexSet[node].size;
+				cand_con = g_indexSet_idx_is_id[node].size;
 				leaf_path_info[leaf].first = before_con;//set the connection node array
 
 				for (long long i = 0; i < cand_con; i++)
@@ -388,7 +388,7 @@ inline void generateMatchingOrderByDynamic() {
 			temp_array_query_index = 0; //always put to zero before using it, for safety
 			while (g_query_node_id_to_matching_order_num[leaf_id] == 0) { // here, actually stop at an already selected node
 				temp_array_query[temp_array_query_index++] = leaf_id;
-				leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+				leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 			}
 
 			while (temp_array_query_index != 0) {// add the sequence in the temp array into the sequence array
@@ -421,11 +421,11 @@ inline void calculateLayerCostInCoreByCoreQueryTree(long long & root, long long 
 		long long current_node = stack_array_query[stack_array_index - 1];
 		double current_nte_number = (double)sum_nontree_edge_of_every_node[current_node];
 		stack_array_index--;
-		CoreQueryBFSTreeNode & tree_node = core_query_tree[current_node];
+		CoreQueryBFSTreeNode & tree_node = core_query_tree_idx_is_id[current_node];
 
 		long long path_sum = 0;
-		for (long long x = 0; x < indexSet[current_node].size; x++)
-			path_sum += indexSet[current_node].path[x];
+		for (long long x = 0; x < g_indexSet_idx_is_id[current_node].size; x++)
+			path_sum += g_indexSet_idx_is_id[current_node].path[x];
 
 		sum_path[current_node] = path_sum;
 
@@ -450,7 +450,7 @@ inline void calculateLayerCostInCoreByCoreQueryTree(long long & root, long long 
 			   // It's DFS
 			for (long long i = tree_node.children.first; i < tree_node.children.first + tree_node.children.second; i++) {
 				long long child = g_core_tree_node_child_array[i];
-				sum_nontree_edge_of_every_node[child] = current_nte_number + core_query_tree[child].nte.second;
+				sum_nontree_edge_of_every_node[child] = current_nte_number + core_query_tree_idx_is_id[child].nte.second;
 				stack_array_query[stack_array_index++] = child;
 			}
 		}
@@ -551,21 +551,21 @@ inline void test1() {
 			double path_sum = 0;
 
 			//find its connection node
-			long long node = core_query_tree[leaf].parent_node;
+			long long node = core_query_tree_idx_is_id[leaf].parent_node;
 			long long before_connect = leaf; //set the node before connection node
 											 // long long parent_cand_size = indexSet[BFS_parent_query[leaf]].size;
-			long long parent_cand_size = indexSet[node].size;
+			long long parent_cand_size = g_indexSet_idx_is_id[node].size;
 
 			for (long long i = 0; i < parent_cand_size; i++)
-				path_acuu[i] = indexSet[leaf].size_of_index[i];
+				path_acuu[i] = g_indexSet_idx_is_id[leaf].size_of_index[i];
 
 			while (visited[node] == 0) { // here, stop when reaching the connection node
 
-				long long cand_size = indexSet[g_forward_build_parent[node]].size;
+				long long cand_size = g_indexSet_idx_is_id[g_forward_build_parent[node]].size;
 				for (long long x = 0; x < cand_size; x++) {
 					path_temp[x] = 0;
-					for (long long y = 0; y < indexSet[node].size_of_index[x]; y++) {
-						long long pos = indexSet[node].index_N_up_u[x][y].index;
+					for (long long y = 0; y < g_indexSet_idx_is_id[node].size_of_index[x]; y++) {
+						long long pos = g_indexSet_idx_is_id[node].index_N_up_u[x][y].index;
 						path_temp[x] += path_acuu[pos];
 					}
 				}
@@ -574,10 +574,10 @@ inline void test1() {
 					path_acuu[x] = path_temp[x];
 
 				before_connect = node;//set the node as the last node before the connection node
-				node = core_query_tree[node].parent_node;//this node's parent
+				node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 			}
 
-			cand_con = indexSet[node].size;
+			cand_con = g_indexSet_idx_is_id[node].size;
 			for (long long i = 0; i < cand_con; i++)
 				path_sum += path_acuu[i];
 			leaf_path_info[leaf].first = before_connect;//set the connection node array
@@ -601,7 +601,7 @@ inline void test1() {
 
 		while (!visited[leaf_id]) { // here, actually stop at an already selected node
 			temp_array_query[temp_array_query_index++] = leaf_id;
-			leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+			leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 		}
 
 		// add the sequence in the temp array into the sequence array
@@ -643,17 +643,17 @@ inline void test1() {
 				double path_sum = 0;
 
 				//========== find its connection node
-				CPINode & unit_leaf = indexSet[leaf];
-				long long node = core_query_tree[leaf].parent_node;
+				CPINode & unit_leaf = g_indexSet_idx_is_id[leaf];
+				long long node = core_query_tree_idx_is_id[leaf].parent_node;
 				long long before_con = leaf; //set the node before connection node
 
-				for (long long i = 0; i < indexSet[g_forward_build_parent[leaf]].size; i++)
+				for (long long i = 0; i < g_indexSet_idx_is_id[g_forward_build_parent[leaf]].size; i++)
 					path_acuu[i] = unit_leaf.size_of_index[i];
 
 				while (!visited[node]) { // here, stop when reaching the connection node
 
-					CPINode & unit_node = indexSet[node];
-					long long cand_size = indexSet[g_forward_build_parent[node]].size;
+					CPINode & unit_node = g_indexSet_idx_is_id[node];
+					long long cand_size = g_indexSet_idx_is_id[g_forward_build_parent[node]].size;
 
 					for (long long x = 0; x < cand_size; x++) {
 						path_temp[x] = 0;
@@ -667,10 +667,10 @@ inline void test1() {
 						path_acuu[x] = path_temp[x];
 
 					before_con = node;//set before connection node
-					node = core_query_tree[node].parent_node;//this node's parent
+					node = core_query_tree_idx_is_id[node].parent_node;//this node's parent
 				}
 
-				cand_con = indexSet[node].size;
+				cand_con = g_indexSet_idx_is_id[node].size;
 				leaf_path_info[leaf].first = before_con;//set the connection node array
 
 				for (long long i = 0; i < cand_con; i++)
@@ -694,7 +694,7 @@ inline void test1() {
 			temp_array_query_index = 0; //always put to zero before using it, for safety
 			while (visited[leaf_id] == 0) { // here, actually stop at an already selected node
 				temp_array_query[temp_array_query_index++] = leaf_id;
-				leaf_id = core_query_tree[leaf_id].parent_node;//this node's parent
+				leaf_id = core_query_tree_idx_is_id[leaf_id].parent_node;//this node's parent
 			}
 
 			while (temp_array_query_index != 0) {// add the sequence in the temp array into the sequence array

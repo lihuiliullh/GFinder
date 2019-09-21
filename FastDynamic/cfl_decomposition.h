@@ -82,7 +82,7 @@ inline void extractResidualStructures() {
 	
 	memset(NEC_map, -1, sizeof(long long) * g_cnt_node_query_graph);
 
-	char * visited = g_visited_for_query_graph;
+	char * visited = g_visited_for_query_graph_idx_is_id;
 	memset(visited, 0, sizeof(char) * g_cnt_node_query_graph);
 
 	
@@ -99,8 +99,8 @@ inline void extractResidualStructures() {
 			long long neighbor = g_nodes_adj_list_with_edge_type_query_graph[j].node_id;
 			if (g_core_number_query_graph[neighbor] < 2) {
 				// two cases here, the NEC node or a residual tree
-				if (g_node_degree_query_graph[neighbor] == 1) {
-					long long label = g_nodes_label_query_graph[neighbor];
+				if (g_node_degree_query_graph_idx_is_id[neighbor] == 1) {
+					long long label = g_nodes_label_query_graph_idx_is_id[neighbor];
 					// node i first meet this label
 					if (NEC_mapping_child_with_same_label_cnt[label * MAX_QUERY_NODE + core_node_i] == 0) {
 						NEC_mapping_pair[NEC_leaf_mapping_pair_index++] = NEC_element(label, core_node_i, neighbor);
@@ -150,9 +150,9 @@ inline void extractResidualStructures() {
 								visited[child_node] = 1;
 
 								//======== special treatment here: if a node is a leaf (degree being 1), then put it into nec node set
-								if (g_node_degree_query_graph[child_node] == 1) {
+								if (g_node_degree_query_graph_idx_is_id[child_node] == 1) {
 
-									long long label = g_nodes_label_query_graph[child_node];
+									long long label = g_nodes_label_query_graph_idx_is_id[child_node];
 
 									if (NEC_mapping_child_with_same_label_cnt[label * MAX_QUERY_NODE + current_node] == 0) {
 										NEC_mapping_pair[NEC_leaf_mapping_pair_index++] = NEC_element(label, current_node, child_node);// child is the repesentive node
@@ -246,7 +246,7 @@ inline void extractResidualStructures() {
 
 #ifdef RESULT_ENUMERATION
 	for (long long i = 0; i < g_cnt_node_query_graph; i++) {
-		if (g_node_degree_query_graph[i] != 1)
+		if (g_node_degree_query_graph_idx_is_id[i] != 1)
 			continue;
 		NEC_Node * next = NEC_Node_array[i].nextAddress;
 		if (next == NULL)

@@ -97,7 +97,7 @@ inline void updateCandidatesCheckValueByNeighbor(long long & current_node, char 
 		}
 
 		long long pre_visited_adj_node_in_query = neighbor;
-		CPINode & nte_pre_node_unit = indexSet[pre_visited_adj_node_in_query];
+		CPINode & nte_pre_node_unit = g_indexSet_idx_is_id[pre_visited_adj_node_in_query];
 
 		// iterate all candidate
 		for (long long y = 0; y < nte_pre_node_unit.size; y++) {
@@ -127,44 +127,82 @@ inline bool sortByBridgeLength(CPICell p1, CPICell p2) {
 	return p1.bridge_length < p2.bridge_length;
 }
 
+typedef pair<int, int> edge;
 
 // forward backward
 inline void buildBFSTreeCPI(long long root_candidate_id) {
+
+	pair<int, int>* seq_edge_this_level = new pair<int, int>[10000];
 
 	memset(g_already_visited_data_graph, 0, sizeof(char) * g_cnt_node_of_data_graph);
 
 	g_need_clean.clear();
 
-	CPINode & root_node_unit = indexSet[g_root_node_id_of_query];
-	root_node_unit.candidates[0] = root_candidate_id;
-	root_node_unit.size = 1;
-	fill(root_node_unit.path, root_node_unit.path + 1, 1);
+	char* visited_idx_is_id = g_visited_for_query_graph_idx_is_id;
+	memset(visited_idx_is_id, 0, sizeof(char) * g_cnt_node_query_graph);
+	visited_idx_is_id[g_root_node_id_of_query] = 1;
 
-	char * visited = g_visited_for_query_graph;
-	memset(visited, 0, sizeof(char) * g_cnt_node_query_graph);
-	visited[g_root_node_id_of_query] = 1;
+	CPINode & root_node_indexSet_unit = g_indexSet_idx_is_id[g_root_node_id_of_query];
 
+	// no NLF check here, and only one node for root indexSet
+	root_node_indexSet_unit.candidates[0] = root_candidate_id;
+	root_node_indexSet_unit.size = 1;
+	fill(root_node_indexSet_unit.path, root_node_indexSet_unit.path + 1, 1);
+
+	
+	int seq_edge_this_level_index = 0;
 	long long current_level = 0;
 
 	// forward
-	for (long long i = 1; i < g_BFS_sequence_length; i++) {
+	for (long long i = 1; i < g_BFS_sequence_length_of_query_all_node; i++) {
 
-		long long current_node = BFS_sequence_query_of_all[i];
-		long long BFS_parent = BFS_parent_query[current_node];
-		visited[current_node] = 1;
-		long long label_cur = g_nodes_label_query_graph[current_node];
-		long long degree_cur = g_node_degree_query_graph[current_node];
-		long long level_cur = BFS_level_query[current_node];
+		long long current_node_id_in_query = BFS_visit_sequence_of_query_contain_all_nodes[i];
+		long long BFS_parent = BFS_parent_query_idx_is_id[current_node_id_in_query];
+		visited_idx_is_id[current_node_id_in_query] = 1;
+		long long label_cur = g_nodes_label_query_graph_idx_is_id[current_node_id_in_query];
+		long long degree_cur = g_node_degree_query_graph_idx_is_id[current_node_id_in_query];
+		long long level_cur = BFS_level_query_idx_is_id[current_node_id_in_query];
+
+
+		//================== BACKWARD PRUNTING ===================================
+		//backward pruning for same-level ntes with one level is finished
+		// level_cur is the BFS level of current node, when current_level is updated after level_cur
+		if (level_cur != current_level) {
+			current_level = level_cur;
+			seq_edge_this_level_index--;
+			while (seq_edge_this_level_index != -1) {
+				edge nte = seq_edge_this_level[seq_edge_this_level_index];
+				int refinee = nte.first;
+				CPINode& refinee_node_unit = g_indexSet_idx_is_id[refinee];
+				int label = g_nodes_label_query_graph_idx_is_id[refinee];
+
+				while (nte.first == refinee) {
+					int child = nte.second;
+					CPINode& child_node_unit = g_indexSet_idx_is_id[child];
+					int can_id;
+					pair<int, int> result;
+					for (int x = 0; x < child_node_unit.size; x++) {
+						can_id = child_node_unit.candidates[x];
+						if (can_id == -1) {
+							continue;
+						}
+
+						
+					}
+				}
+			}
+		}
 
 #ifdef CORE_AND_MAX_NB_FILTER
 
 		long long core_cur = g_core_number_query_graph[current_node];
 #endif
 		long long max_nb_degree = 0;
-		generateNLFQueryNode(current_node, degree_cur, max_nb_degree);
+		generateNLFForQueryNode(current_node_id_in_query, degree_cur, max_nb_degree);
+		//===================================================================================
 
-		CPINode & cur_node_unit = indexSet[current_node];
-		CPINode & parent_unit = indexSet[BFS_parent];
+		CPINode & cur_node_unit = g_indexSet_idx_is_id[current_node_id_in_query];
+		CPINode & parent_unit = g_indexSet_idx_is_id[BFS_parent];
 
 		initCpiNodeByParent(cur_node_unit, parent_unit);
 
@@ -172,7 +210,7 @@ inline void buildBFSTreeCPI(long long root_candidate_id) {
 
 		// updateCandidatesCheckValueByNeighbor(current_node, visited, level_cur, label_cur, check_value);
 		memset(g_already_visited_data_graph, 0, sizeof(char) * g_cnt_node_of_data_graph);
-		updateCandidatesCheckValueByNeighbor(current_node, visited, label_cur, check_value);
+		updateCandidatesCheckValueByNeighbor(current_node_id_in_query, visited_idx_is_id, label_cur, check_value);
 
 		long long child_index = 0;
 		for (long long parent_cand_index = 0; parent_cand_index < parent_unit.size; parent_cand_index++) {
@@ -312,19 +350,19 @@ inline int buildSimCPINode(long long currentId_query, long long parent_id_query)
 
 	int pre_visited_num = 0;
 
-	long long curLabel = g_nodes_label_query_graph[currentId_query];
-	char * visited = g_visited_for_query_graph;
+	long long curLabel = g_nodes_label_query_graph_idx_is_id[currentId_query];
+	char * visited = g_visited_for_query_graph_idx_is_id;
 	// build according to its neighbor
 	long long current_id_ = currentId_query;
 
-	initCpiNodeByParent(indexSet[currentId_query], indexSet[parent_id_query]);
+	initCpiNodeByParent(g_indexSet_idx_is_id[currentId_query], g_indexSet_idx_is_id[parent_id_query]);
 
 	long long check_value = 0;
 
 	updateCandidatesCheckValueByNeighbor(currentId_query, visited, curLabel, check_value);
 
-	CPINode & cur_node_unit = indexSet[current_id_];
-	CPINode & parent_unit = indexSet[parent_id_query];
+	CPINode & cur_node_unit = g_indexSet_idx_is_id[current_id_];
+	CPINode & parent_unit = g_indexSet_idx_is_id[parent_id_query];
 
 	long long child_index = 0;
 	for (long long parent_cand_index = 0; parent_cand_index < parent_unit.size; parent_cand_index++) {
@@ -448,13 +486,13 @@ inline int buildSimCPINode(long long currentId_query, long long parent_id_query)
 
 inline void buildBFSSequence() {
 
-	CoreQueryBFSTreeNode * root = &core_query_tree[g_root_node_id_of_query];
-	BFS_sequence_query_of_all[0] = g_root_node_id_of_query;
-	BFS_parent_query[g_root_node_id_of_query] = -1;
+	CoreQueryBFSTreeNode * root = &core_query_tree_idx_is_id[g_root_node_id_of_query];
+	BFS_visit_sequence_of_query_contain_all_nodes[0] = g_root_node_id_of_query;
+	BFS_parent_query_idx_is_id[g_root_node_id_of_query] = -1;
 
 	for (int i = 0; i < g_forward_build_sequence.size(); i++) {
 		long long nodeId = g_forward_build_sequence[i];
-		BFS_parent_query[nodeId] = g_forward_build_parent[i];
+		BFS_parent_query_idx_is_id[nodeId] = g_forward_build_parent[i];
 	}
 
 }
@@ -475,7 +513,7 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 	g_forward_level[g_root_node_id_of_query] = 1;
 	g_level[1].push_back(g_root_node_id_of_query); // 0 is never used
 
-	char * visited = g_visited_for_query_graph;
+	char * visited = g_visited_for_query_graph_idx_is_id;
 	memset(visited, 0, sizeof(char) * g_cnt_node_query_graph);
 	visited[g_root_node_id_of_query] = 1;
 
@@ -496,7 +534,7 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 
 	g_core_tree_node_child_array_index = 0;
 	g_core_tree_node_nte_array_index = 0;
-	initializeTreeNode(core_query_tree[g_root_node_id_of_query], -1);
+	initializeTreeNode(core_query_tree_idx_is_id[g_root_node_id_of_query], -1);
 	///////////////////////////////////////////
 
 	g_core_size = 1;
@@ -519,8 +557,8 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 
 			/////////////////////////////////////////////////////
 			if (visited[child_node_in_query] != 0) {
-				if (child_node_in_query != core_query_tree[cur_id_in_query].parent_node) {
-					addNonTreeEdgeToTreeNode(core_query_tree[cur_id_in_query], child_node_in_query);
+				if (child_node_in_query != core_query_tree_idx_is_id[cur_id_in_query].parent_node) {
+					addNonTreeEdgeToTreeNode(core_query_tree_idx_is_id[cur_id_in_query], child_node_in_query);
 				}
 			}
 			////////////////////////////////////////////////////
@@ -532,8 +570,8 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 
 				CPINodeSize cpiSize;
 				cpiSize.CPI_id_in_query = child_node_in_query;
-				cpiSize.size = indexSet[child_node_in_query].size;
-				cpiSize.degree = g_node_degree_query_graph[child_node_in_query];
+				cpiSize.size = g_indexSet_idx_is_id[child_node_in_query].size;
+				cpiSize.degree = g_node_degree_query_graph_idx_is_id[child_node_in_query];
 				cpiSize.pre_visited_num = pre_visited_num;
 				cpiSize.level = g_forward_level[cur_id_in_query] + 1;
 
@@ -555,8 +593,8 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 				push_heap(cpi_small_heap.begin(), cpi_small_heap.end(), greater<CPINodeSize>());
 				g_core_size++;
 
-				initializeTreeNode(core_query_tree[child_node_in_query], cur_id_in_query);
-				addChildToTreeNode(core_query_tree[cur_id_in_query], child_node_in_query);
+				initializeTreeNode(core_query_tree_idx_is_id[child_node_in_query], cur_id_in_query);
+				addChildToTreeNode(core_query_tree_idx_is_id[cur_id_in_query], child_node_in_query);
 			}
 		}
 	}
@@ -565,11 +603,159 @@ inline void buildDynamicTreeCPI(long long root_candidate_id) {
 
 }
 
+inline void forwardPrune(int root_cand_id) {
+	char* visited = g_visited_for_query_graph_idx_is_id;
+	memset(visited, 0, sizeof(char) * g_cnt_node_query_graph);
+
+	int query_edge_size = g_nodes_adj_list_with_edge_type_query_graph.size();
+	int data_edge_size = size_of_g_nodes_adj_list_with_edge_type_data_graph;
+
+	if (!g_is_init_edge_matchinig_array) {
+		g_edge_matching_array = new int[query_edge_size * data_edge_size];
+		g_is_init_edge_matchinig_array = true;
+		memset(g_edge_matching_array, 0, sizeof(int) * query_edge_size * data_edge_size);
+	}
+
+	int* edge_matching_array = g_edge_matching_array;
 
 
-inline void backwardPrune() {
+	for (long long level = 2; level <= g_level_size; level++) {
+		long long current_level = level;
 
-	char * visited = g_visited_for_query_graph;
+		stable_sort(g_level[current_level].begin(), g_level[current_level].end(), sortByDegree_Query_dec);
+
+		for (long long seq_index = 0; seq_index < g_level[current_level].size(); seq_index++) {
+			long long cur_node = g_level[current_level][seq_index];
+
+			//if this node is a nec node, then it doesnt need to be refined by simulation.
+			//if (NEC_map[cur_node] != -1) {
+			//	continue;
+			//}
+
+			CPINode& cur_node_unit = g_indexSet_idx_is_id[cur_node];
+			long long label_cur = g_nodes_label_query_graph_idx_is_id[cur_node];
+
+			//==== FIRST STEP: deal with its BFS children =====================
+
+			CoreQueryBFSTreeNode& tree_node = core_query_tree_idx_is_id[cur_node];
+
+			for (long long j = tree_node.children.first; j < tree_node.children.first + tree_node.children.second; j++) {
+				long long child = g_core_tree_node_child_array[j];
+				visited[child] = 1;
+
+				if (NEC_map[child] != -1 && NEC_map[child] != child)
+					continue;
+
+				CPINode& child_node_unit = g_indexSet_idx_is_id[child];
+
+				// check each candidate node which belongs to current node
+				for (long long cand_index = 0; cand_index < cur_node_unit.size; cand_index++) {
+					if (cur_node_unit.candidates[cand_index] == -1)
+						continue;
+
+					//check the positions one by one
+					CPICell* temp_index = child_node_unit.index_N_up_u[cand_index];
+					long long& temp_size_of_index = child_node_unit.size_of_index[cand_index];
+
+					for (long long cand_child_index = 0; cand_child_index < temp_size_of_index; cand_child_index++) {
+						long long node_pos = temp_index[cand_child_index].index;
+						if (child_node_unit.candidates[node_pos] == -1) {
+							temp_index[cand_child_index] = temp_index[temp_size_of_index - 1];
+							temp_size_of_index--;
+							cand_child_index--;
+						}
+					} // end for : finished checking the positions
+
+					// candiate node were pruned here
+					// -1 means prune
+					if (temp_size_of_index == 0)
+						cur_node_unit.candidates[cand_index] = -1;
+				}
+
+			}
+			//=================================================================
+			//====== SECOND STEP : deal with non-BFS children with larger level =====================
+
+			long long check_value = 0;
+			for (long long j = g_nodes_adj_list_start_index_query_graph[cur_node]; j < g_nodes_adj_list_start_index_query_graph[cur_node + 1]; j++) {
+				long long neighbor = g_nodes_adj_list_with_edge_type_query_graph[j].node_id;
+				EdgeType current_to_child = g_nodes_adj_list_with_edge_type_query_graph[j];
+				int query_edge_index = j;
+				// only consider bigger, because the index is build in forward sequence.
+				//if (g_forward_level[child] <= current_level || visited[child])
+				//	continue;
+
+				//children here must have a larger level than the current level, so it would be a child with a cross-level nte
+				//if (NEC_map[child] != -1 && NEC_map[child] != child)
+				//	continue;
+
+				long long can_id;
+				pair<long long, long long> result;
+				CPINode& neighbor_node_unit = g_indexSet_idx_is_id[neighbor];
+				for (long long x = 0; x < neighbor_node_unit.size; x++) {
+					can_id = neighbor_node_unit.candidates[x];
+					if (can_id == -1)
+						continue;
+					// result is the neighbor, not the parent.
+					result = g_node_id_label_position_matrix_data_graph[can_id * (g_cnt_unique_label_data_graph + 1) + label_cur];
+
+					for (long long y = result.first; y < result.first + result.second; y++) {
+						// check whether temp_node is a good candidate for current_indexset.
+						long long temp_node = g_nodes_adj_list_with_edge_type_data_graph[y].node_id;
+						EdgeType child_to_current = g_nodes_adj_list_with_edge_type_data_graph[y];
+						int data_edge_index = y;
+
+						if (v_cnt[temp_node] == check_value) {
+							// not run before
+							int index_in_edge_matching = query_edge_index * data_edge_size + data_edge_index;
+							if (edge_matching_array[index_in_edge_matching] == 0) {
+								if (child_to_current.is_in_edge_type(&current_to_child)) {
+									edge_matching_array[index_in_edge_matching] = 1;
+									v_cnt[temp_node] ++;
+									if (check_value == 0)
+										g_good_count_need_clean_index_data_graph[g_good_count_need_clean_size++] = temp_node;
+								}
+								else {
+									edge_matching_array[index_in_edge_matching] = -1;
+								}
+							}
+							else if (edge_matching_array[index_in_edge_matching] == 1) {
+								v_cnt[temp_node] ++;
+								if (check_value == 0)
+									g_good_count_need_clean_index_data_graph[g_good_count_need_clean_size++] = temp_node;
+							}
+
+						}
+					}
+				}
+				check_value++;
+
+			}
+
+			for (long long cand_index = 0; cand_index < cur_node_unit.size; cand_index++) {
+				int& cand_id = cur_node_unit.candidates[cand_index];
+				if (cand_id == -1)
+					continue;
+				if (v_cnt[cand_id] != check_value || root_cand_id == cand_id)
+					cand_id = -1;
+			}
+
+			while (g_good_count_need_clean_size != 0)
+				v_cnt[g_good_count_need_clean_index_data_graph[--g_good_count_need_clean_size]] = 0;
+
+			for (long long j = tree_node.children.first; j < tree_node.children.first + tree_node.children.second; j++)
+				visited[g_core_tree_node_child_array[j]] = 0;
+			//=============================================================================================
+
+		}
+
+
+	}
+}
+
+inline void backwardPrune(int root_cand_id) {
+
+	char * visited = g_visited_for_query_graph_idx_is_id;
 	memset(visited, 0, sizeof(char) * g_cnt_node_query_graph);
 
 	int query_edge_size = g_nodes_adj_list_with_edge_type_query_graph.size();
@@ -584,7 +770,7 @@ inline void backwardPrune() {
 	int * edge_matching_array = g_edge_matching_array;
 	
 
-	for (long long level = g_level_size; level > 0; level--) {
+	for (long long level = g_level_size; level > 1; level--) {
 		long long current_level = level;
 
 		stable_sort(g_level[current_level].begin(), g_level[current_level].end(), sortByDegree_Query_dec);
@@ -597,12 +783,12 @@ inline void backwardPrune() {
 			//	continue;
 			//}
 
-			CPINode & cur_node_unit = indexSet[cur_node];
-			long long label_cur = g_nodes_label_query_graph[cur_node];
+			CPINode & cur_node_unit = g_indexSet_idx_is_id[cur_node];
+			long long label_cur = g_nodes_label_query_graph_idx_is_id[cur_node];
 
 			//==== FIRST STEP: deal with its BFS children =====================
 			
-			CoreQueryBFSTreeNode & tree_node = core_query_tree[cur_node];
+			CoreQueryBFSTreeNode & tree_node = core_query_tree_idx_is_id[cur_node];
 			
 			for (long long j = tree_node.children.first; j < tree_node.children.first + tree_node.children.second; j++) {
 				long long child = g_core_tree_node_child_array[j];
@@ -611,7 +797,7 @@ inline void backwardPrune() {
 				if (NEC_map[child] != -1 && NEC_map[child] != child)
 					continue;
 
-				CPINode & child_node_unit = indexSet[child];
+				CPINode & child_node_unit = g_indexSet_idx_is_id[child];
 
 				// check each candidate node which belongs to current node
 				for (long long cand_index = 0; cand_index < cur_node_unit.size; cand_index++) {
@@ -656,7 +842,7 @@ inline void backwardPrune() {
 
 				long long can_id;
 				pair<long long, long long> result;
-				CPINode & neighbor_node_unit = indexSet[neighbor];
+				CPINode & neighbor_node_unit = g_indexSet_idx_is_id[neighbor];
 				for (long long x = 0; x < neighbor_node_unit.size; x++) {
 					can_id = neighbor_node_unit.candidates[x];
 					if (can_id == -1)
@@ -701,7 +887,7 @@ inline void backwardPrune() {
 				int & cand_id = cur_node_unit.candidates[cand_index];
 				if (cand_id == -1)
 					continue;
-				if (v_cnt[cand_id] != check_value)
+				if (v_cnt[cand_id] != check_value || root_cand_id == cand_id)
 					cand_id = -1;
 			}
 

@@ -67,8 +67,8 @@ inline void findAllMatching() {
 	long long current_id_query;
 	long long parent_id;
 
-	for (int i = 0; i < indexSet[g_root_node_id_of_query].size; i++) {
-		long long root_cand_id_data = indexSet[g_root_node_id_of_query].candidates[i];
+	for (int i = 0; i < g_indexSet_idx_is_id[g_root_node_id_of_query].size; i++) {
+		long long root_cand_id_data = g_indexSet_idx_is_id[g_root_node_id_of_query].candidates[i];
 		if (root_cand_id_data == -1) {
 			continue;
 		}
@@ -111,7 +111,7 @@ inline void findAllMatching() {
 			current_id_query = unit->node;
 
 			parent_id = g_matching_order_unit_of_query[unit->pt_index].node;
-			index_unit_current = &indexSet[current_id_query];
+			index_unit_current = &g_indexSet_idx_is_id[current_id_query];
 
 			// temp_search_unit not init before
 			temp_search_unit = &search_iterator[already_matched_size];

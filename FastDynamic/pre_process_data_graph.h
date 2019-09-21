@@ -557,9 +557,9 @@ inline void initParametersBeforeQuery() {
 	g_good_count_need_clean_size = 0;
 
 	for (long long i = 0; i < MAX_QUERY_NODE; i++) {
-		indexSet[i].candidates = new int[g_max_label_counter];
-		indexSet[i].path = new long[g_max_label_counter];
-		indexSet[i].parent_cand_size = 0;
+		g_indexSet_idx_is_id[i].candidates = new int[g_max_label_counter];
+		g_indexSet_idx_is_id[i].path = new long[g_max_label_counter];
+		g_indexSet_idx_is_id[i].parent_cand_size = 0;
 	}
 
 	g_root_candidates = new int[g_max_label_counter];
@@ -598,7 +598,7 @@ inline void buildOneHopLabelCountQuery_used_by_sim() {
 
 		for (int i = begin; i < end; i++) {	
 			int neighbor = g_nodes_adj_list_with_edge_type_query_graph[i].node_id;
-			int label = g_nodes_label_query_graph[neighbor];
+			int label = g_nodes_label_query_graph_idx_is_id[neighbor];
 			g_one_hop_label_count_query_graph[node_id * g_cnt_unique_label_data_graph + label - 1]++;
 		}
 	}
@@ -674,7 +674,7 @@ inline void buildSimilarityMatrix() {
 
 				less_num = 0;
 				int data_degree = g_node_degree_data_graph[data_id];
-				int query_degree = g_node_degree_query_graph[query_id];
+				int query_degree = g_node_degree_query_graph_idx_is_id[query_id];
 
 				int diff = data_degree - query_degree;
 
@@ -745,7 +745,7 @@ inline void single_readQueryGraph(string query_graph_file) {
 			int label_from_file = atoi(v[2].c_str());
 			int actual_label = g_transfer_label_mapping[label_from_file];
 
-			g_nodes_label_query_graph[node_index] = actual_label;
+			g_nodes_label_query_graph_idx_is_id[node_index] = actual_label;
 		}
 
 		if (line.at(0) == 'e') {
@@ -773,7 +773,7 @@ inline void single_readQueryGraph(string query_graph_file) {
 	long long sum_degree = 0;
 	for (long long i = 0; i < local_adj_list.size(); i++) {
 		int degree = local_adj_list[i].size();
-		g_node_degree_query_graph[i] = degree;
+		g_node_degree_query_graph_idx_is_id[i] = degree;
 		g_core_number_query_graph[i] = degree;
 		sum_degree += degree;
 		if (degree > MAX_DEGREE_A_NODE_QUERY) {
@@ -789,6 +789,10 @@ inline void single_readQueryGraph(string query_graph_file) {
 	g_core_tree_node_child_array.resize(g_sum_degree_query_graph);
 	g_core_tree_node_nte_array.resize(g_sum_degree_query_graph);
 
+	// for query augment experiment
+	g_query_adj_matrix = new char[g_cnt_node_query_graph * g_cnt_node_query_graph];
+	memset(g_query_adj_matrix, 0, sizeof(char) * g_cnt_node_query_graph * g_cnt_node_query_graph);
+
 	// build adj list
 	g_nodes_adj_list_with_edge_type_query_graph.resize(sum_degree);
 	long long cur_adj_start_index = 0;
@@ -803,6 +807,12 @@ inline void single_readQueryGraph(string query_graph_file) {
 		for (int j = 0; j < local_adj_list[i].size(); j++) {
 			g_nodes_adj_list_with_edge_type_query_graph[adj_list_index] = local_adj_list[i][j];
 			adj_list_index++;
+
+			// for query augment experiment
+			int k = local_adj_list[i][j].node_id;
+
+			g_query_adj_matrix[i * g_cnt_node_query_graph + k] = 1;
+			g_query_adj_matrix[k * g_cnt_node_query_graph + i] = 1;
 		}
 		cur_adj_start_index += local_adj_list[i].size();
 	}
@@ -811,6 +821,7 @@ inline void single_readQueryGraph(string query_graph_file) {
 	buildOneHopLabelCountQuery_used_by_sim();
 
 	buildSimilarityMatrix();
+	
 }
 
 
@@ -840,8 +851,8 @@ inline void readQueryGraph(ifstream &fin_query) {
 		}
 
 		// build label, build degree, build core_number
-		g_nodes_label_query_graph[i] = g_transfer_label_mapping[g_label_cur_node_query_graph];
-		g_node_degree_query_graph[i] = g_degree_cur_node_query_graph;
+		g_nodes_label_query_graph_idx_is_id[i] = g_transfer_label_mapping[g_label_cur_node_query_graph];
+		g_node_degree_query_graph_idx_is_id[i] = g_degree_cur_node_query_graph;
 		g_core_number_query_graph[i] = g_degree_cur_node_query_graph;
 		// build adj list
 		for (long long j = 0; j < g_degree_cur_node_query_graph; j++) {

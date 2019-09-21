@@ -105,7 +105,7 @@ inline double LeafMappingEnumeration(double & found_mapping_enumeration, int * a
 			long long sum = NEC_set_array[j].sum;
 			long long represent_node = NEC_set_array[j].represent_node;
 			long long parent_pos = g_cand_pos_in_indexset[parent_id];
-			CPINode & unit = indexSet[represent_node];
+			CPINode & unit = g_indexSet_idx_is_id[represent_node];
 			for (long long it = 0; it < unit.size_of_index[parent_pos]; it++) {
 				long long can = unit.candidates[unit.index_N_up_u[parent_pos][it].index];
 				if (!already_mapping_flag_data[can])
@@ -138,7 +138,7 @@ inline double LeafMappingEnumeration(double & found_mapping_enumeration, int * a
 
 			long long start_l = leaf_cands.size();
 
-			CPINode & unit = indexSet[represent_node];
+			CPINode & unit = g_indexSet_idx_is_id[represent_node];
 			long long parent_id = NEC_set_array[start].parent_id;
 			long long parent_pos = g_cand_pos_in_indexset[parent_id];
 
@@ -182,7 +182,7 @@ inline double LeafMappingEnumeration(double & found_mapping_enumeration, int * a
 				long long represent_node = NEC_set_array[nec_index].represent_node;
 				long long parent_pos = g_cand_pos_in_indexset[parent_id];
 
-				CPINode & unit = indexSet[represent_node];
+				CPINode & unit = g_indexSet_idx_is_id[represent_node];
 				long long start = leaf_cands.size();
 				for (long long it = 0; it < unit.size_of_index[parent_pos]; it++) {
 					long long can = unit.candidates[unit.index_N_up_u[parent_pos][it].index];
@@ -354,8 +354,8 @@ inline void find_inexact_result() {
 	int * already_mapping_flag_data = g_good_count_data_graph;
 	long long back_trace_time = 0;
 
-	for (long long i = 0; i < indexSet[g_root_node_id_of_query].size; i++) {
-		long long root_cand_id = indexSet[g_root_node_id_of_query].candidates[i];
+	for (long long i = 0; i < g_indexSet_idx_is_id[g_root_node_id_of_query].size; i++) {
+		long long root_cand_id = g_indexSet_idx_is_id[g_root_node_id_of_query].candidates[i];
 		if (root_cand_id == -1) {
 			continue;
 		}
@@ -441,7 +441,7 @@ inline void find_inexact_result() {
 			temp_search_unit = &search_iterator[already_matched_size];
 			current_id = unit->node;
 			parent_id = g_matching_order_unit_of_query[unit->pt_index].node;
-			index_unit_current = &indexSet[current_id];
+			index_unit_current = &g_indexSet_idx_is_id[current_id];
 
 			if (g_result_heap.size() >= TOPK) {
 				if (g_max_cost_in_heap == 0) {
