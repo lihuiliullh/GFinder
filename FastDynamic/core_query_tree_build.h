@@ -120,6 +120,31 @@ inline void buildBFSCoreQueryTree() {
 }
 
 
+inline void level_index_to_g_level() {
+	// level_index, BFS_visit_sequence_of_query_contain_all_nodes to g_level
+	int max_level = 1;
+
+	for (int level = level_index.size() - 1; level >= 0; level--) {// level by level
+
+		int current_level = level + 1;
+
+		pair<int, int> pos = level_index[level];
+		int start = pos.first;
+		int end = pos.second;
+
+		//for each node in this level
+		for (int seq_index = start; seq_index < end; seq_index++) { //default sequence now
+
+			int cur_node = BFS_visit_sequence_of_query_contain_all_nodes[seq_index];
+			g_level[current_level].push_back(cur_node);
+		}
+	}
+
+	g_level_size = level_index.size() + 1;
+	g_core_size = g_BFS_sequence_length_of_query_all_node;
+}
+
+
 
 
 #endif // !FAST_DYNAMIC_CORE_QUERY_BUILD_H_

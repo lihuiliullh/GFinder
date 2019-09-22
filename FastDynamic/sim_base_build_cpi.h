@@ -167,6 +167,7 @@ inline void buildBFSTreeCPI(long long root_candidate_id) {
 		//================== BACKWARD PRUNTING ===================================
 		//backward pruning for same-level ntes with one level is finished
 		// level_cur is the BFS level of current node, when current_level is updated after level_cur
+		/*
 		if (level_cur != current_level) {
 			current_level = level_cur;
 			seq_edge_this_level_index--;
@@ -191,7 +192,7 @@ inline void buildBFSTreeCPI(long long root_candidate_id) {
 					}
 				}
 			}
-		}
+		}*/
 
 #ifdef CORE_AND_MAX_NB_FILTER
 

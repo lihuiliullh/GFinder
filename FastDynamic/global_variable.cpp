@@ -145,7 +145,7 @@ int * g_two_hop_label_count_data_graph;
 int * g_one_hop_label_count_query_graph = NULL;
 int * g_two_hop_label_count_query_graph = NULL;
 vector<set<long long>> g_set_of_node_adj_list_query_graph;
-vector < pair<long long, long long> > level_index;
+vector < pair<int, int> > level_index;
 
 long long BFS_parent_query_idx_is_id[MAX_QUERY_NODE];
 long long BFS_level_query_idx_is_id[MAX_QUERY_NODE];

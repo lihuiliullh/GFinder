@@ -178,7 +178,7 @@ extern int * g_two_hop_label_count_data_graph;
 extern int * g_one_hop_label_count_query_graph;
 extern int * g_two_hop_label_count_query_graph;
 extern vector<set<long long>> g_set_of_node_adj_list_query_graph;
-extern vector < pair<long long, long long> > level_index;
+extern vector < pair<int, int> > level_index;
 
 extern long long BFS_parent_query_idx_is_id[MAX_QUERY_NODE];
 extern long long BFS_level_query_idx_is_id[MAX_QUERY_NODE];

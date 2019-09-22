@@ -268,7 +268,7 @@ struct CoreQueryBFSTreeNode {
 	long long parent_node = -1;
 	pair<long long, long long> children; // start_pos, length
 	pair<long long, long long> nte; // start_pos, length
-	vector<long long> * cross_lvl_nte;
+	vector<int> * cross_lvl_nte;
 };
 
 

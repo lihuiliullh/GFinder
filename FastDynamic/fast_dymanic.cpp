@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 	NODE_MISS_COST = 10;
 	BRIDGE_COST = 10;
 	EDGE_MISSING_COST = 10;
-	DYNAMIC = true;
+	DYNAMIC = false;
 	// IS_ONE_HOP_DATA_GRAPH should be equl to 1 or 0
 	// 1 means yes
 	IS_ONE_HOP_DATA_GRAPH = 1;
@@ -228,7 +228,53 @@ int main(int argc, char *argv[])
 				if (!DYNAMIC) {
 					buildBFSCoreQueryTree();
 					buildBFSTreeCPI(root_cand_id);
-					backwardPrune(root_cand_id);
+					level_index_to_g_level();
+					// BFS sequence to g_level
+
+
+					for (int ii = 0; ii < 10; ii++) {
+						backwardPrune(root_cand_id);
+						forwardPrune(root_cand_id);
+					}
+
+
+					printIndexTrueSize(g_indexSet_idx_is_id);
+
+
+					//statisticCandidateSize(indexSet);
+
+					//disableSomeIndexSet_keepConnect(g_indexSet_idx_is_id, 32, 47, true);
+					//disableSomeIndexSet_keepConnect(g_indexSet_idx_is_id, 0, 41, false);
+
+					disableSomeIndexSet_keepConnect(g_indexSet_idx_is_id, 1, 20, false);
+
+					for (int ii = 0; ii < 10; ii++) {
+
+						backwardPrune(root_cand_id);
+						forwardPrune(root_cand_id);
+					}
+
+					printIndexTrueSize(g_indexSet_idx_is_id);
+
+
+
+					statisticCandidateSize(g_indexSet_idx_is_id);
+
+
+					disableSomeIndexSet_keepConnect(g_indexSet_idx_is_id, 5, 27, true);
+
+					for (int ii = 0; ii < 10; ii++) {
+
+						backwardPrune(root_cand_id);
+						forwardPrune(root_cand_id);
+					}
+
+					printIndexTrueSize(g_indexSet_idx_is_id);
+
+					
+
+
+					//backwardPrune(root_cand_id);
 					generateInexactMatchingOrder();
 				}
 				else {
