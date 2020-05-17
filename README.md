@@ -1,6 +1,17 @@
 # GFinder
 
-This is the implementation of paper "".
+This is the implementation of paper "GFinder: Approximate attributed subgraph matching".
+
+History:
+At the begining, the algorithm was named FastDynamic and I submitted the paper to Ijcai, but it was rejected by Ijcai.
+Then, I renamed the algorithm to GLooker, and submitted it to CIKM, but it was rejected again.
+Finally, I renamed the algorithm to GFinder, and the paper was accepted. 
+
+If you have anyquestion about the algorithm, please open an issue. I will try to answer your problem if I have time.
+But the most important thing is you should try to understand the code by yourself.
+PS. There is no bug in the code.
+
+------------------------------------------------------------------------------------------------------------------------
 
 This Project (G-Looker) is implemented on visual studio C++ 2015, windows 10 64 bits.
 The source code is stored in directory "./FastDynamic-edge-type-list-hash"
