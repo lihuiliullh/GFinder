@@ -52,5 +52,7 @@ hop-number: if hop-number == 0, means 2 hop. If hop-number >=1 means 1 hop.
 For example:
 
 .\FastDynamic.exe C:\flickr.txt.format C:\query_noise_7.txt.format 10 30 10 10 0    (use two-hop distance)
+
 .\FastDynamic.exe C:\flickr.txt.format C:\query_noise_7.txt.format 10 30 10 10 1    (use one-hop distance)
+
 .\FastDynamic.exe C:\flickr.txt.format C:\query_noise_7.txt.format 10 30 10 10 2    (use one-hop distance)
