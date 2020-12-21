@@ -95,130 +95,10 @@ int main(int argc, char *argv[])
 
 	// use for directed graph
 
-	//argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Gordian_v2\\all-channel.edges.format";
-	//argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Gordian_v2\\gordian-v2-request";
-
-	// have results
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\after-transform\\7K-Composite-sig-v2.edges.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\after-transform\\7k-request";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\demofile2.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\ground_truth.query";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\500-query";
-
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\DBLP-130-query";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\DBLP-74-query";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\DBLP-57-query";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\8-query";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\Aminer.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\mat\\Aminer-18-query";
-
-	//argv[1] = "C:\\Users\\lliu165\\Documents\\share\\test-CFL\\data-edge-list.txt.format";
-	//argv[1] = "C:\\Users\\lliu165\\Documents\\share\\test-CFL\\data-square-edge-list.txt.format";
-	//argv[2] = "C:\\Users\\lliu165\\Documents\\share\\test-CFL\\query-data-edge-list";
-	//argv[2] = "C:\\Users\\lliu165\\Documents\\share\\test-CFL\\query-data-square-edge-list";
-
-
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_7";
-
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\NeMa\\2.imdb\\code\\CFL_graph_imdb_after_label_trans.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\NeMa\\2.imdb\\code\\query_after_label_trans_7";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\flickr-lastfm\\flickr.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\flickr-lastfm\\CFL_query_noise_9";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\lastfm\\lastfm.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\lastfm\\CFL_query_noise_9";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\DBLP.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_17";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_73";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_101";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_130";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_184";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_228";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\DBLP\\normal_query_261";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B0\\V4-Composite-B0.csv.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B0\\query_file";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\10k\\B1\\V4-Composite-B1.csv.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\10k\\B1\\query_file";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\10k\\B0\\V4-Composite-B0.csv.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\10k\\B0\\V4-MergedSignal-B0-S0.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B11\\V4-Composite-B11.csv.9.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B11\\V4-MergedSignal-B11-S9.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B2\\V4-Composite-B2.csv.9.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B2\\V4-MergedSignal-B2-S9.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B3\\V4-Composite-B3.csv.9.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B3\\V4-MergedSignal-B3-S9.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B1\\V4-Composite-B1_noise_10.csv.0.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B1\\V4-MergedSignal-B1-S0.csv.format";
-
-
-
-
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\one-hop\\one_hop_Composite_indirect.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\one-hop\\one_hop_FullSignalTemplate_indirect.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\two-hop\\one_hop_Composite_no_two_indirect.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\two-hop\\one_hop_FullSignalTemplate_no_two_indirect.format";
-
-	//argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\noise\\NoisyComposite.format";
-	//argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\noise\\FullSignalTemplate.format";
-
-
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Gordian_v3\\data.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Gordian_v3\\query2.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\Composite.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\challenge\\FullSignalTemplate.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B0\\V4-Composite-B0.csv.2.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4-B0\\V4-MergedSignal-B0-S2.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V5\\V5-Composite-B1.csv.1.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V5\\V5-MergedSignal-B1-S1.csv.format";
-
 	
 
-	argv[1] = "C:\\flickr.txt.format";
-	argv[2] = "C:\\query_noise_7.txt.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\Aminer\\Aminer.txt.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\fast-dynamic-experiment\\data\\Aminer\\query_noise_6.txt.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4_B0_10k\\V4-Composite-B0.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V4_B0_10k\\V4-MergedSignal-B0-S0.csv.format";
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V6\\v6-Composite-B0.csv.14.filter.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\V6\\V6-MergedSignal-B0-S13.csv.format";
-
-	argv[1] = "C:\\Users\\lihui\\workspace\\V7-Composite-B0-by-cand-small-grouped.csv.format";
-	//argv[1] = "C:\\Users\\lihui\\workspace\\V7-Template0-B0-small-grouped.csv.format";
-	argv[2] = "C:\\Users\\lihui\\workspace\\V7-Template0-B0-small-grouped.csv.format";
-
-	
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Composite-B0-by-cand-small-grouped.csv.format";
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Template0-B0-small-grouped.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\v7_2\\V7-Template0-B0-small-grouped.csv.format";
-
-	
-
-	argv[1] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\complete-phone-sms-shift-round.csv.filter-grouped.csv.format";
-	argv[2] = "C:\\Users\\lliu165\\Documents\\share\\DARPA_MAA_Graphs_V2_30Oct2017\\Milan\\template1-grouped.csv.format";
-
-	argv[1] = "C:\\Users\\lihui\\workspace\\DARPA\\Milan\\complete-phone-sms-grouped.csv.format";
-	argv[2] = "C:\\Users\\lihui\\workspace\\DARPA\\Milan\\template7-grouped.csv.format";
+	argv[1] = "C:\\Users\\lihui\\workspace\\github\\test_dataset\\data.format";
+	argv[2] = "C:\\Users\\lihui\\workspace\\github\\test_dataset\\query.format";
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,9 +201,9 @@ int main(int argc, char *argv[])
 			g_root_node_id_of_query = selectRootFromQuery();
 			//g_root_node_id_of_query = 1;
 			findRootCandidate();
-			int root_index_point = 0;
+			int root_index_point = -1;
 			while (g_root_candidates_size == 0) {
-				root_index_point = root_index_point + 4;
+				root_index_point = root_index_point + 1;
 				if (root_index_point == query_root_sort_list.size()) {
 					cout << "All node in core has no candidate!" << endl;
 					return 0;
