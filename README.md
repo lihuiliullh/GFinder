@@ -7,9 +7,7 @@ At the begining, the algorithm was named FastDynamic and I submitted the paper t
 Then, I renamed the algorithm to GLooker, and submitted it to CIKM, but it was rejected again.
 Finally, I renamed the algorithm to GFinder, and the paper was accepted. 
 
-If you have anyquestion about the algorithm, please open an issue. I will try to answer your problem if I have time.
-But the most important thing is you should try to understand the code by yourself.
-PS. There is no bug in the code.
+If you have anyquestion about the algorithm, please open an issue.
 
 
 
@@ -22,10 +20,14 @@ Its test data can also be used here.
 ------------------------------------------------------------------------------------------------------------------------
 
 This Project (G-Looker) is implemented on visual studio C++ 2015, windows 10 64 bits.
-The source code is stored in directory "./FastDynamic-edge-type-list-hash"
-Some sample data files are stored in direcotry "./data"
+Some sample data files are stored in direcotry "./testdata"
 
 Usage:
+
+You can use visual studio to open the project, and run the project.
+
+--or
+
 If you want to run G-Looker, use the command like this:
 
 FastDynamic.exe data_file_name query_file_name top-k node-miss-cost  intermediate-vertex-cost  edge-miss-cost hop-number
