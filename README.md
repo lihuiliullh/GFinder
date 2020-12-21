@@ -11,6 +11,14 @@ If you have anyquestion about the algorithm, please open an issue. I will try to
 But the most important thing is you should try to understand the code by yourself.
 PS. There is no bug in the code.
 
+
+
+Updated 2020-Dec-12. Another version of G-Finder which can support edge type similarity can be found at https://github.com/lihuiliullh/GFinder-Proj
+It contains some docx which tell details of how to run G-Finder.
+Its test data can also be used here.
+
+
+
 ------------------------------------------------------------------------------------------------------------------------
 
 This Project (G-Looker) is implemented on visual studio C++ 2015, windows 10 64 bits.
