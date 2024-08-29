@@ -56,3 +56,47 @@ For example:
 .\FastDynamic.exe C:\flickr.txt.format C:\query_noise_7.txt.format 10 30 10 10 1    (use one-hop distance)
 
 .\FastDynamic.exe C:\flickr.txt.format C:\query_noise_7.txt.format 10 30 10 10 2    (use one-hop distance)
+
+
+
+
+------------------------------------
+
+Explaination of the data format
+
+```
+t 1 5
+v 0 1
+v 1 1
+v 2 3
+v 3 2
+v 4 2
+e 0 1 0,1;0,1
+e 0 4 1,1;1,1
+e 1 2 2,1;2,1
+e 2 3 0,1;0,1
+e 3 4 0,1;0,1
+
+Explaination
+t denotes the start of a graph
+1 is the graph, starts from 1
+5 means there are 5 nodes in the graph
+
+v x y
+v means it is a node
+x is the node id, starts from 0
+y is the node label, starts from 1
+edge label starts from 0
+
+e x y a1,b1,a2,b2,...;n1,m1,n2,m2,...
+e means this is an edge
+x is the source node id
+y is the target node id
+a1,b1,a2,b2,... means there are b1 edges from x to y with edge label a1, there are b2 edges from x to y with edge label a2 and so on.
+n1,m1,n2,m2,... means there are m1 edges from y to x with edge label n1, there are m2 edges from y to x with edge label n2 and so on.
+
+For example,
+e 0 1 0,1;0,1 means there is 1 edge from node0 to node1 with label 0, and 1 edge from node1 to node0 with label 0
+e 1 2 2,1;2,1 means there is 1 edge from node1 to node2 with label 2, and 1 edge from node2 to node1 with label 2
+```
+
